@@ -1,0 +1,10 @@
+## Interface: 40300
+## Title: Probably_bbRotationsCataclysm
+## Author: Backburn
+## Dependencies: Probably
+
+libs\library.lua
+rotations\hunter\survival.lua
+rotations\paladin\protection.lua
+rotations\shaman\elemental.lua
+rotations\shaman\restoration.lua

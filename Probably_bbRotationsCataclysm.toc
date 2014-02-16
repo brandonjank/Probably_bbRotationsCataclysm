@@ -8,3 +8,5 @@ rotations\hunter\survival.lua
 rotations\paladin\protection.lua
 rotations\shaman\elemental.lua
 rotations\shaman\restoration.lua
+rotations\priest\holy.lua
+rotations\priest\discipline.lua

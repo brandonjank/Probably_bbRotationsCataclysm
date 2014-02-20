@@ -46,7 +46,7 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 		-- Earthquake is optional but if you're specced into it, use it when there's 5 or more targets.
 	}, {
 		"modifier.multitarget",
-	}}
+	}},
 
 	-- Single Target
 	-- 1) Searing Totem. Fire Elemental totem if have all spellpower procs/cooldowns ready and you can drop it on the boss.

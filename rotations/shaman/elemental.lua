@@ -31,7 +31,7 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 	--{ "Thunderstorm", { "modifier.enemies >= 6", "modifier.multitarget" } },
 	
 	-- Totems
-	{ "Call of the Elements", { "toggle.totems", "player.time < 1" } },
+	{ "Call of the Elements", { "toggle.totems", "player.time < 3", "!modifier.last(Call of the Elements)" } },
 	-- { "Healing Stream Totem", { "toggle.totems", "!totem(Healing Stream Totem)", "player.mana > 90" } },
 	-- { "Mana Spring Totem", { "toggle.totems", "!totem(Mana Spring Totem)", "player.mana < 90" } },
 	
@@ -81,5 +81,6 @@ function()
 	ProbablyEngine.toggle.create('pvpmode', 'Interface\\Icons\\achievement_pvp_o_h', 'PvP', 'Toggle the usage of PvP abilities.')
 	ProbablyEngine.toggle.create('mouseovers', 'Interface\\Icons\\spell_fire_flameshock', 'Toggle Mouseovers', 'Automatically cast spells on mouseover targets')
 	ProbablyEngine.toggle.create('autotarget', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Target', 'Automaticaly target the nearest enemy when target dies or does not exist.')
-	ProbablyEngine.toggle.create('totems', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Totem', 'Automaticaly use and recall totems.')
+	ProbablyEngine.toggle.create('totems', 'Interface\\Icons\\ability_shaman_multitotemactivation', 'Auto Totem', 'Automaticaly use and recall totems.')
+	ProbablyEngine.toggle.create('autofollow', 'Interface\\Icons\\achievement_guildperk_everybodysfriend', 'Auto Follow', 'Automaticaly follows your focus target. Must be another player.')
 end)

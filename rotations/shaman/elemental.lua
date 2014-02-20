@@ -25,18 +25,18 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 	{ "Flame Shock", { "mouseover.enemy", "mouseover.alive", "@bbLib.notAboutToDie(target)", "mouseover.debuff(Flame Shock).duration <= 3", "toggle.mouseovers" }, "mouseover" },
 
 	-- Moving Rotation
-	{ "Lightning Bolt", { "player.moving", "!player.buff(Spiritwalker's Grace)" } },
+	{ "Lightning Bolt", { "player.moving", "!player.buff(Spiritwalker's Grace)", "player.spell(Unleashed Lightning)" } }, -- Need Unleashed Lightning Glyph for moving lighting bolts.
 
 	-- PvP
 	--{ "Thunderstorm", { "modifier.enemies >= 6", "modifier.multitarget" } },
 	
 	-- Totems
 	{ "Call of the Elements", { "toggle.totems", "player.time < 3", "!modifier.last(Call of the Elements)" } },
-	-- { "Healing Stream Totem", { "toggle.totems", "!totem(Healing Stream Totem)", "player.mana > 90" } },
-	-- { "Mana Spring Totem", { "toggle.totems", "!totem(Mana Spring Totem)", "player.mana < 90" } },
+	{ "Healing Stream Totem", { "toggle.totems", "!player.totem(Healing Stream Totem)", "player.mana > 90", "player.health < 95" } },
+	{ "Mana Spring Totem", { "toggle.totems", "!player.totem(Mana Spring Totem)", "player.mana < 90" } },
 	
 	-- Cooldowns
-	--{ "Fire Elemental Totem", { "toggle.totems", "modifier.cooldowns", "target.boss" } },
+	{ "Fire Elemental Totem", { "toggle.totems", "modifier.cooldowns", "target.boss", "!player.totem(Fire Elemental Totem)" } },
 	--{ "Elemental Mastery", { "modifier.cooldowns", "target.boss" } }, -- Not going on cooldown.
 	
 	-- Multi Target
@@ -50,7 +50,7 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 
 	-- Single Target
 	-- 1) Searing Totem. Fire Elemental totem if have all spellpower procs/cooldowns ready and you can drop it on the boss.
-	--{ "Searing Totem", { "toggle.totems", "!player.totem(Fire Elemental Totem)", "!player.totem(Searing Totem)" } },
+	{ "Searing Totem", { "toggle.totems", "!player.totem(Fire Elemental Totem)", "!player.totem(Searing Totem)" } },
 	{ "Flame Shock", "target.debuff(Flame Shock).duration <= 3" },
 	{ "Lava Burst", "target.debuff(Flame Shock)" },
 	{ "Earth Shock", { "player.buff(Lightning Shield)", "player.buff(Lightning Shield).count > 7", "target.debuff(Flame Shock).duration >= 6" } },
@@ -66,7 +66,7 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 	{ "Lightning Shield", "!player.buff(Lightning Shield)" },
 
 	-- Heal
-	--{ "Healing Stream Totem", { "toggle.totems", "player.health < 80" } },
+	{ "Healing Stream Totem", { "toggle.totems", "!player.totem(Healing Stream Totem)", "player.health < 80" } },
 	
 	-- Pull Totems
 	--{ "Totemic Recall", { "toggle.totems", "player.moving", "!modifier.last(Totemic Recall)" } }, -- player.totems

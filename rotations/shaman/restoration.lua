@@ -80,7 +80,7 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 	--{ "Greater Healing Wave", "@coreHealing.needsDispelled(Chomp)" },
 	{ "Greater Healing Wave", "lowest.health < 50", "lowest" },
 	{ "Greater Healing Wave", { "lowest.health < 65", "player.buff(Tidal Waves).count = 2" }, "lowest" },
-	{ "Greater Healing Wave", { "focus.health < 80" }, "focus" },
+	{ "Greater Healing Wave", { "focus.health < 65" }, "focus" },
 	{ "Chain Heal", { "modifier.multitarget", "@coreHealing.needsHealing(80, 3)" }, "lowest" },
 	{ "Healing Wave", { "lowest.health < 98" }, "lowest" }, -- Do not use on tank, use greater
 	

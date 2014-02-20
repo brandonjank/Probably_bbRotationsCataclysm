@@ -29,6 +29,45 @@ function bbLib.bossMods()
 	return false
 end
 
+function bbLib.holdCooldown(cdtime)
+  if GetMinimapZoneText() == "Deathwing" 
+    and UnitName("target") ~= "Burning Tendons" 
+	and cdtime >= 1 then 
+		return false
+	end
+  if UnitName("target") == "Warlord Zon'ozz" 
+    and not UnitDebuffID("target",104031) 
+	and cdtime >= 3 then 
+		return false 
+	end
+  if UnitName("boss1") == "Alysrazor" 
+	and not UnitDebuffID("boss1",99432) 
+	and cdtime >= 3 then 
+		return false 
+	end
+	return true
+end
+
+
+function bbLib.notAboutToDie(target) 
+	if UnitIsPlayer(target) 
+	  and UnitFactionGroup("player") ~= UnitFactionGroup(target) then 
+		return true
+	end
+	local members = 1
+	if UnitInRaid("player") then
+		members = GetRealNumRaidMembers() - 7
+	elseif UnitInParty("player") then
+		members = GetRealNumPartyMembers() - 2
+	end
+	if members < 1 then members = 1 end
+
+	if UnitHealth(target) < UnitHealthMax("player") * members then 
+		return false
+	end
+	return true
+end
+
 function bbLib.stackCheck(spell, otherTank, stacks)
 	local debuffName, _, _, debuffCount = UnitDebuff(otherTank, spell)
 	if debuffName and debuffCount >= stacks and not UnitDebuff("player", spell) then
@@ -293,5 +332,7 @@ end
 function bbLib.unitIsPlayer(target)
   return UnitIsUnit(target, "player") == 1
 end
+
+
 
 ProbablyEngine.library.register("bbLib", bbLib)

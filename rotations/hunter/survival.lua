@@ -55,7 +55,7 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 		
     -- Mouseovers
 	{ "Serpent Sting", { "!modifier.pvpmode", "toggle.mouseovers", "mouseover.exists", "mouseover.enemy", "mouseover.alive", "!mouseover.debuff(Serpent Sting)",
-		"!mouseover.state.charm", "mouseover.deathin > 10" }, "mouseover" },
+		"!mouseover.state.charm", "@bbLib.notAboutToDie(target)" }, "mouseover" }, -- "target.deathin >= 10",
 	
 	-- Traps
 	{ "Trap Launcher", { "modifier.lalt", "!player.buff" } }, -- Trap Launcher
@@ -98,6 +98,7 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	--{ "#76097", { "modifier.cooldowns", "player.health < 40", "@bbLib.useHealthPot" } }, -- Master Healing Potion (76097) 
 	
 	-- Cooldowns
+	-- beginning of the fight: Rapid Fire, Call of the Wild, Engineering Abilities, Trinkets, Potion of the Tol'vir
 	{ "Rapid Fire", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.hashero" } },
 	--{ "53434", "modifier.cooldowns", "pet.exists", "target.exists" }, -- Call of the Wild (pet)
 	--{ "#gloves", { "modifier.cooldowns", "pet.exists", "target.exists" } }, -- Synapse Springs TODO: Check if engineer.
@@ -105,34 +106,49 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	{ "#58145", { "modifier.cooldowns", "toggle.consume", "pet.exists", "target.exists", "player.hashero", "@bbLib.useAgiPot" } }, -- Agility Potion (58145)
 	--{ "20572", "modifier.cooldowns" }, -- Blood Fury (AP)
 	{ "Berserking", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.hashero", "!player.buff(Rapid Fire)" } },
-
-
-	-- Multi Target
+	
+	
+	-- Opener
+	-- Serpent Sting -> Hunter cooldowns -> Explosive Shot -> Black Arrow -> Cobra Shot <Lock and Load Proc> Explosive Shot -> Arcane Shot -> Explosive Shot -> Cobra Shot -> Explosive Shot -> Cobra Shot <Lock and Load Proc> Repeat Prior.
+	
+	
+	-- Lock and Load
+	-- Explosive Shot -> Arcane Shot/Cobra Shot -> Explosive Shot -> Arcane/Cobra Shot -> Explosive Shot -> Arcane/Cobra -> Repeat normal rotation.
 	{{
-		{ "Trap Launcher", { "!player.buff(Trap Launcher)", "player.spell(Explosive Trap).cooldown = 0" } }, -- Trap Launcher for Explosive Trap
-		{ "Explosive Trap", "player.buff(Trap Launcher)", "ground" },
-		{ "Multi-Shot", "modifier.multitarget" },
-		{ "Explosive Shot", { "modifier.multitarget", "player.buff(Lock and Load)", "!target.debuff(Explosive Shot)" } },
-		{ "Kill Shot", { "modifier.multitarget", "target.health <= 20" } },
-		{ "Cobra Shot", { "modifier.multitarget", "player.focus < 40" } },
+		{ "Explosive Shot", "!target.debuff(Explosive Shot)" },
+		{ "Kill Shot", "target.health <= 20" },
+		{ "Multi-Shot", { "toggle.cleavemode", "player.focus > 65", "!modifier.last", "modifier.last(Explosive Shot)" } }, -- "modifier.enemies > 1"
+		{ "Multi-Shot", { "modifier.multitarget", "player.focus > 65", "!modifier.last", "modifier.last(Explosive Shot)" } }, -- "modifier.enemies > 1"
+		{ "Arcane Shot", { "!toggle.cleavemode", "!modifier.multitarget", "player.focus > 65", "!modifier.last", "modifier.last(Explosive Shot)" } },
+		{ "Cobra Shot", "player.focus < 66", "!modifier.last", "modifier.last(Explosive Shot)" },
+	}, {
+		"player.buff(Lock and Load)",
+	}},
+
+	-- Multi Target 5+
+	-- The AoE rotation is Misdirection -> Trap Launcher -> Explosive Trap -> Multi-Shot until out of focus -> Cobra Shot -> Explosive Shot -> Cobra Shot -> Multi-Shot -> Rinse and repeat.
+	{{
+		{ "Trap Launcher", { "!player.buff(Trap Launcher)", "player.spell(Explosive Trap).cooldown < 5" } }, -- Trap Launcher for Explosive Trap
+		{ "Explosive Trap", { "player.buff(Trap Launcher)", "!player.moving" }, "ground" },
+		{ "Multi-Shot" },
+		--{ "Explosive Shot", { "!target.debuff(Explosive Shot)" } },
+		{ "Kill Shot", { "target.health <= 20" } },
+		{ "Cobra Shot", { "player.focus < 40" } },
 	}, {
 		"modifier.multitarget",
 	}},
 	
 	-- Single Target
-	--TODO: LnL: Explosive Shot -> Arcane/Cobra/Kill -> Explosive Shot -> Arcane/Cobra/Kill -> Explosive Shot
-	{ "Serpent Sting", { "!target.debuff(Serpent Sting)", "target.deathin >= 10", "!target.state.charm" } },
 	{ "Explosive Shot", "!target.debuff(Explosive Shot)" },
-	{ "Arcane Shot", { "player.focus > 44", "player.buff(Lock and Load)", "target.debuff(Explosive Shot)", "!modifier.last(Arcane Shot)" } },
 	{ "Kill Shot", "target.health <= 20" },
-	{ "Black Arrow", { "!target.debuff(Black Arrow)", "target.deathin >= 8" } },
+	{ "Black Arrow", { "!target.debuff(Black Arrow)", "@bbLib.notAboutToDie(target)" } }, -- "target.deathin >= 8"
+	{ "Serpent Sting", { "!target.debuff(Serpent Sting)", "!target.state.charm", "@bbLib.notAboutToDie(target)" } }, -- "target.deathin >= 10",
+	{ "Multi-Shot", { "toggle.cleavemode", "player.focus > 79" } }, -- "modifier.enemies > 1"
+	{ "Arcane Shot", { "!toggle.cleavemode", "player.focus > 79" } },
+	
 	{ "Concussive Shot", { "toggle.pvpmode", "!target.debuff(Concussive Shot).any", "target.moving", "!target.immune.snare" } },
 	{ "Widow Venom", { "toggle.pvpmode", "!target.debuff(Widow Venom).any", "target.health > 20" } },
-	{ "Cobra Shot", "target.debuff(Serpent Sting).duration < 6" },
-	{ "Multi-Shot", { "toggle.cleavemode", "player.focus > 66", "modifier.enemies > 1" } },
-	{ "Trap Launcher", { "toggle.cleavemode", "modifier.enemies > 2", "!player.buff", "player.spell(Explosive Trap).cooldown = 0" } }, -- Trap Launcher for Explosive Trap
-	{ "Explosive Trap", { "toggle.cleavemode", "modifier.enemies > 2" }, "ground" },
-	{ "Arcane Shot", { "player.focus > 79" } },
+	
 	{ "Cobra Shot", "player.spell(Explosive Shot).cooldown > 1" },
 	{ "Cobra Shot", "player.focus < 44" },
 	

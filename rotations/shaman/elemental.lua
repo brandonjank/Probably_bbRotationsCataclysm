@@ -27,17 +27,17 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 	-- Moving Rotation
 	{ "Lightning Bolt", { "player.moving", "!player.buff(Spiritwalker's Grace)" } },
 
-	-- Cooldowns
-	{ "Fire Elemental Totem", { "modifier.cooldowns", "target.boss" } },
-	{ "Elemental Mastery", { "modifier.cooldowns", "target.boss" } },
-
 	-- PvP
 	--{ "Thunderstorm", { "modifier.enemies >= 6", "modifier.multitarget" } },
 	
 	-- Totems
-	-- { "Healing Stream Totem", { "!totem(Healing Stream Totem)", "player.mana > 90" } },
-	-- { "Mana Spring Totem", "!totem(Mana Spring Totem)", "player.mana < 90" } },
-	{ "Call of the Elements", "player.time < 1" },
+	{ "Call of the Elements", { "toggle.totems", "player.time < 1" } },
+	-- { "Healing Stream Totem", { "toggle.totems", "!totem(Healing Stream Totem)", "player.mana > 90" } },
+	-- { "Mana Spring Totem", { "toggle.totems", "!totem(Mana Spring Totem)", "player.mana < 90" } },
+	
+	-- Cooldowns
+	--{ "Fire Elemental Totem", { "toggle.totems", "modifier.cooldowns", "target.boss" } },
+	--{ "Elemental Mastery", { "modifier.cooldowns", "target.boss" } }, -- Not going on cooldown.
 	
 	-- Multi Target
 	{{
@@ -50,7 +50,7 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 
 	-- Single Target
 	-- 1) Searing Totem. Fire Elemental totem if have all spellpower procs/cooldowns ready and you can drop it on the boss.
-	{ "Searing Totem", { "!player.totem(Fire Elemental Totem)", "!player.totem(Searing Totem)" } },
+	--{ "Searing Totem", { "toggle.totems", "!player.totem(Fire Elemental Totem)", "!player.totem(Searing Totem)" } },
 	{ "Flame Shock", "target.debuff(Flame Shock).duration <= 3" },
 	{ "Lava Burst", "target.debuff(Flame Shock)" },
 	{ "Earth Shock", { "player.buff(Lightning Shield)", "player.buff(Lightning Shield).count > 7", "target.debuff(Flame Shock).duration >= 6" } },
@@ -66,10 +66,10 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 	{ "Lightning Shield", "!player.buff(Lightning Shield)" },
 
 	-- Heal
-	{ "Healing Stream Totem", "player.health < 80" },
+	--{ "Healing Stream Totem", { "toggle.totems", "player.health < 80" } },
 	
 	-- Pull Totems
-	{ "Totemic Recall", { "player.totems", "player.moving", "!modifier.last(Totemic Recall)" } },
+	--{ "Totemic Recall", { "toggle.totems", "player.moving", "!modifier.last(Totemic Recall)" } }, -- player.totems
 	
 	-- Ghost Wolf
 	{ "Ghost Wolf", { "!player.buff(Ghost Wolf)", "player.moving", "!modifier.last(Ghost Wolf)" } },
@@ -81,4 +81,5 @@ function()
 	ProbablyEngine.toggle.create('pvpmode', 'Interface\\Icons\\achievement_pvp_o_h', 'PvP', 'Toggle the usage of PvP abilities.')
 	ProbablyEngine.toggle.create('mouseovers', 'Interface\\Icons\\spell_fire_flameshock', 'Toggle Mouseovers', 'Automatically cast spells on mouseover targets')
 	ProbablyEngine.toggle.create('autotarget', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Target', 'Automaticaly target the nearest enemy when target dies or does not exist.')
+	ProbablyEngine.toggle.create('totems', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Totem', 'Automaticaly use and recall totems.')
 end)

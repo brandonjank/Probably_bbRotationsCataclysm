@@ -34,11 +34,6 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 	--{ "Gift of the Naaru", "player.health <= 70", "player" },
 	--{ "Lifeblood", { "modifier.cooldowns", "player.spell(Lifeblood).cooldown < 1" }, "player" },
 	
-	-- PvP
-	{ "Tremor Totem", "player.state.fear" },
-	{ "Tremor Totem", "player.state.charm" },
-	{ "Tremor Totem", "player.state.sleep" },
-	
 	-- Healing Rain Mouseover
 	{ "Unleash Elements", "modifier.lshift" },
 	{ "Healing Rain", "modifier.lshift", "ground" },
@@ -49,6 +44,30 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 	
 	-- Dispel
 	--{ "Purify Spirit", "@coreHealing.needsDispelled('Aqua Bomb')" },
+	
+	-- Totems
+	{{
+		{ "Call of the Elements", "player.time < 3" },
+		-- Earth
+		{ "Tremor Totem", { "!player.totem(Tremor Totem)", "player.state.fear" } },
+		{ "Tremor Totem", { "!player.totem(Tremor Totem)", "player.state.charm" } },
+		{ "Tremor Totem", { "!player.totem(Tremor Totem)", "player.state.sleep" } },
+		{ "Stoneskin Totem", {  "!player.totem(Stoneskin Totem)", "!player.totem(Strength of Earth Totem)", "!player.totem(Tremor Totem)", "!player.totem(Stoneclaw Totem)", "!player.buff(Stoneskin).any" } },
+		{ "Strength of Earth Totem", { "!player.totem(Stoneskin Totem)", "!player.totem(Strength of Earth Totem)", "!player.totem(Tremor Totem)", "!player.totem(Stoneclaw Totem)", "!player.buff(Horn of Winter).any", "!player.buff(Battle Shout).any", "!player.buff(Roar of Courage).any", "!player.buff(Strength of Earth).any" } },
+		{ "Stoneclaw Totem", { "!player.totem(Stoneskin Totem)", "!player.totem(Strength of Earth Totem)", "!player.totem(Tremor Totem)", "!player.totem(Stoneclaw Totem)" } },
+		-- Fire
+
+		-- Water
+		{ "Healing Stream Totem", { "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "player.mana > 60" } },
+		{ "Mana Spring Totem", { "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "player.mana < 60" } },
+		-- Air
+		{ "Wrath of Air Totem", { "!player.totem(Wrath of Air Totem)", "!player.totem(Windfury Totem)", "!player.buff(Mind Quickening).any", "!player.buff(Moonkin Aura).any", "!player.buff(Wrath of Air Totem).any" } },
+		{ "Windfury Totem", { "!player.totem(Wrath of Air Totem)", "!player.totem(Windfury Totem)", "!player.buff(Hunting Party).any", "!player.buff(Windfury Totem).any" } },
+	}, {
+			"toggle.totems", 
+			"!modifier.last(Call of the Elements)",
+			"!player.moving",
+	}},
 	
 	-- Cooldowns
 	--{ "#gloves", { "modifier.cooldowns", "player.totem(Healing Tide Totem)" } },
@@ -92,9 +111,8 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 	{ "Lightning Bolt", { "toggle.dpsmode", "focus.exists", "focustarget.exists", "focustarget.enemy", "focustarget.range < 40", "!modifier.last(Lightning Bolt)" }, "focustarget" }, --"player.glyph(Glyph of Telluric Currents)",
 	{{
 		{ "Wind Shear", { "focustarget.exists", "focus.friend", "focustarget.casting", "focustarget.range <= 25" }, "focustarget" }, -- Interrupt focustarget TODO: Change to interruptAt
-		{ "Fire Elemental Totem", { "modifier.cooldowns", "focustarget.boss", "focustarget.range < 40"  } },
-		--{ "Stormlash Totem", { "modifier.cooldowns", "player.hashero", "focustarget.boss", "focustarget.range < 40" } },
-		--{ "Searing Totem", { "!player.totem(Magma Totem)", "!player.totem(Fire Elemental Totem)", "!player.totem(Searing Totem)" } },
+		{ "Fire Elemental Totem", { "modifier.cooldowns", "target.boss", "!player.totem(Fire Elemental Totem)" } }, -- Check for int buffs and cooldowns before casting
+		{ "Searing Totem", { "!player.totem(Fire Elemental Totem)", "!player.totem(Searing Totem)" } },
 		{ "Flame Shock", { "focustarget.exists", "!focustarget.debuff(Flame Shock)", "focustarget.deathin > 20" }, "focustarget" },
 		{ "Lava Burst", { "focustarget.exists", "focustarget.debuff(Flame Shock)" }, "focustarget" },
 	}, {
@@ -119,8 +137,11 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 	{ "Riptide", { "focus.exists", "focus.friend", "focus.alive", "focus.combat", "!focus.buff(Riptide)" }, "focus" },
 	
 	-- Heal
-	--{ "Healing Stream Totem", "player.health < 80" },
-	{ "Healing Wave", { "!player.moving", "lowest.health < 85" }, "lowest" },
+	{ "Healing Stream Totem", { "toggle.totems", "!player.moving", "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "player.health < 90" } },
+	{ "Mana Spring Totem", { "toggle.totems", "!player.moving", "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "player.mana < 80" } },
+	{ "Healing Surge", { "!player.moving", "lowest.health < 30" }, "lowest" },
+	{ "Greater Healing Wave", { "!player.moving", "lowest.health < 60" }, "lowest" },
+	{ "Healing Wave", { "!player.moving", "lowest.health < 90" }, "lowest" },
 	
 	-- Ghost Wolf
 	{ "Ghost Wolf", { "!player.buff(Ghost Wolf)", "player.moving", "!modifier.last(Ghost Wolf)" } },
@@ -131,8 +152,9 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 },
 function()
 	ProbablyEngine.toggle.create('pvpmode', 'Interface\\Icons\\achievement_pvp_o_h', 'PvP', 'Toggle the usage of PvP abilities.')
-	ProbablyEngine.toggle.create('dpsmode', 'Interface\\Icons\\ability_dualwield', 'DPS Mode', 'Toggle the usage of damage dealing abilities.')
 	ProbablyEngine.toggle.create('mouseovers', 'Interface\\Icons\\spell_fire_flameshock', 'Toggle Mouseovers', 'Automatically cast spells on mouseover targets')
-	ProbablyEngine.toggle.create('autotarget', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Target', 'Automaticaly target the nearest enemy when target dies or does not exist.')
+	ProbablyEngine.toggle.create('totems', 'Interface\\Icons\\ability_shaman_multitotemactivation', 'Auto Totem', 'Automaticaly use and recall totems.') -- change icon
 	ProbablyEngine.toggle.create('autofollow', 'Interface\\Icons\\achievement_guildperk_everybodysfriend', 'Auto Follow', 'Automaticaly follows your focus target. Must be another player.')
+	ProbablyEngine.toggle.create('autotarget', 'Interface\\Icons\\ability_hunter_snipershot', 'Auto Target', 'Automaticaly target the nearest enemy when target dies or does not exist.')
+	ProbablyEngine.toggle.create('dpsmode', 'Interface\\Icons\\ability_dualwield', 'DPS Mode', 'Toggle the usage of damage dealing abilities.')
 end)

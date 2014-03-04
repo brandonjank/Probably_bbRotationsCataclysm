@@ -59,7 +59,7 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 
 		-- Water
 		{ "Healing Stream Totem", { "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "player.mana > 60" } },
-		{ "Mana Spring Totem", { "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "player.mana < 60" } },
+		{ "Mana Spring Totem", { "!player.totem(Mana Spring Totem)", "!player.totem(Healing Stream Totem)", "!player.totem(Mana Tide Totem)", "player.mana < 60" } },
 		-- Air
 		{ "Wrath of Air Totem", { "!player.totem(Wrath of Air Totem)", "!player.totem(Windfury Totem)", "!player.buff(Mind Quickening).any", "!player.buff(Moonkin Aura).any", "!player.buff(Wrath of Air Totem).any" } },
 		{ "Windfury Totem", { "!player.totem(Wrath of Air Totem)", "!player.totem(Windfury Totem)", "!player.buff(Hunting Party).any", "!player.buff(Windfury Totem).any" } },
@@ -100,8 +100,8 @@ ProbablyEngine.rotation.register_custom(262, "bbRestorationShaman", { -- /dump G
 	{ "Greater Healing Wave", "lowest.health < 50", "lowest" },
 	{ "Greater Healing Wave", { "lowest.health < 65", "player.buff(Tidal Waves).count = 2" }, "lowest" },
 	{ "Greater Healing Wave", { "focus.health < 65" }, "focus" },
-	{ "Chain Heal", { "modifier.multitarget", "@coreHealing.needsHealing(80, 3)" }, "lowest" },
-	{ "Healing Wave", { "lowest.health < 98" }, "lowest" }, -- Do not use on tank, use greater
+	{ "Chain Heal", { "modifier.multitarget", "lowest.health < 98" }, "lowest" }, -- "@coreHealing.needsHealing(80, 3)"
+	{ "Healing Wave", { "!modifier.multitarget", "lowest.health < 98" }, "lowest" }, -- Do not use on tank, use greater
 	
 	-- Interrupt
 	--{ "Quaking Palm", "modifier.interrupts" }, -- Pandaren Racial

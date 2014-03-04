@@ -5,6 +5,7 @@ ProbablyEngine.rotation.register_custom(261, "bbElementalShaman", { -- /dump Get
 -- PLAYER CONTROLLED:
 -- SUGGESTED TALENTS:
 -- CONTROLS: Pause - Left Control
+-- GUIDE: http://forum.molten-wow.com/showthread.php?t=231144
 
 -- COMBAT
 	-- Rotation Utilities

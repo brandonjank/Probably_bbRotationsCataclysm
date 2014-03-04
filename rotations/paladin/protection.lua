@@ -6,6 +6,9 @@ ProbablyEngine.rotation.register_custom(839, "bbProtectionPaladin", {
 -- PLAYER CONTROLLED: Guardian of Ancient Kings, Divine Shield, Devotion Aura
 -- SUGGESTED TALENTS:
 -- CONTROLS: Pause - Left Control, Light's Hammer - Left Alt
+-- GUIDE: http://maintankadin.failsafedesign.com/forum/viewtopic.php?f=4&t=31912 
+-- GEAR: http://www.wowhead.com/forums&topic=197473&p=2958172
+
 
 -- "target.spell(Crusader Strike).range" DOES NTO WORK
 

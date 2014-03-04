@@ -6,6 +6,7 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 -- PLAYER CONTROLLED: Rabid MUST be on Auto-Cast for Stampede pets to use them :)
 -- SUGGESTED TALENTS:
 -- CONTROLS: Pause - Left Control, Explosive/Ice/Snake Traps - Left Alt, Freezing Trap - Right Alt, Scatter Shot - Right Control
+-- GUIDE: http://forum.molten-wow.com/showthread.php?t=226553
 
 -- COMBAT
 	-- Rotation Utilities
@@ -54,8 +55,8 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	-- TODO: Reactive Deterrence
 		
     -- Mouseovers
-	{ "Serpent Sting", { "!modifier.pvpmode", "toggle.mouseovers", "mouseover.exists", "mouseover.enemy", "mouseover.alive", "!mouseover.debuff(Serpent Sting)",
-		"!mouseover.state.charm", "@bbLib.notAboutToDie(target)" }, "mouseover" }, -- "target.deathin >= 10",
+	--{ "Serpent Sting", { "!modifier.pvpmode", "toggle.mouseovers", "mouseover.exists", "mouseover.enemy", "mouseover.alive", "!mouseover.debuff(Serpent Sting)",
+		--"!mouseover.state.charm", "@bbLib.notAboutToDie(target)" }, "mouseover" }, -- "target.deathin >= 10",
 	
 	-- Traps
 	{ "Trap Launcher", { "modifier.lalt", "!player.buff" } }, -- Trap Launcher
@@ -81,8 +82,8 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	}},
 
 	-- Stances
-    { "Aspect of the Hawk", { "toggle.aspect", "!player.buff(Aspect of the Hawk)", "!player.moving" } },
-	{ "Aspect of the Fox", { "toggle.aspect", "!player.buff(Aspect of the Fox)", "player.moving" } },
+    { "Aspect of the Hawk", { "toggle.aspect", "!player.buff(Aspect of the Hawk)", "!player.moving", "!modifier.last" } },
+	{ "Aspect of the Fox", { "toggle.aspect", "!player.buff(Aspect of the Fox)", "player.moving", "!modifier.last" } },
 	
 	-- Pre DPS Pause
 	-- add stop attack?
@@ -99,18 +100,22 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	
 	-- Cooldowns
 	-- beginning of the fight: Rapid Fire, Call of the Wild, Engineering Abilities, Trinkets, Potion of the Tol'vir
-	{ "Rapid Fire", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.hashero" } },
+	{ "Rapid Fire", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.hashero" } }, --, "target.boss"
 	--{ "53434", "modifier.cooldowns", "pet.exists", "target.exists" }, -- Call of the Wild (pet)
-	--{ "#gloves", { "modifier.cooldowns", "pet.exists", "target.exists" } }, -- Synapse Springs TODO: Check if engineer.
+	{ "#gloves", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.buff(Synapse Springs)" } }, -- Synapse Springs TODO: Check if engineer.
 	-- Trinkets
 	{ "#58145", { "modifier.cooldowns", "toggle.consume", "pet.exists", "target.exists", "player.hashero", "@bbLib.useAgiPot" } }, -- Agility Potion (58145)
 	--{ "20572", "modifier.cooldowns" }, -- Blood Fury (AP)
-	{ "Berserking", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.hashero", "!player.buff(Rapid Fire)" } },
+	{ "Berserking", { "modifier.cooldowns", "pet.exists", "target.exists", "!player.hashero", "!player.buff(Rapid Fire)" } }, --, "target.boss" 
 	
 	
 	-- Opener
 	-- Serpent Sting -> Hunter cooldowns -> Explosive Shot -> Black Arrow -> Cobra Shot <Lock and Load Proc> Explosive Shot -> Arcane Shot -> Explosive Shot -> Cobra Shot -> Explosive Shot -> Cobra Shot <Lock and Load Proc> Repeat Prior.
 	
+	-- Melee
+	--{ "Wing Clip", { "!target.debuff(Wing Clip)", "!target.spell(Explosive Shot).range" } },
+	--{ "Raptor Strike", "!target.spell(Explosive Shot).range" },
+	-- Kill Command if in melee
 	
 	-- Lock and Load
 	-- Explosive Shot -> Arcane Shot/Cobra Shot -> Explosive Shot -> Arcane/Cobra Shot -> Explosive Shot -> Arcane/Cobra -> Repeat normal rotation.
@@ -141,12 +146,13 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	-- Single Target
 	{ "Explosive Shot", "!target.debuff(Explosive Shot)" },
 	{ "Kill Shot", "target.health <= 20" },
-	{ "Black Arrow", { "!target.debuff(Black Arrow)", "@bbLib.notAboutToDie(target)" } }, -- "target.deathin >= 8"
-	{ "Serpent Sting", { "!target.debuff(Serpent Sting)", "!target.state.charm", "@bbLib.notAboutToDie(target)" } }, -- "target.deathin >= 10",
+	{ "Black Arrow", { "!target.debuff(Black Arrow)", "@bbLib.notAboutToDie(target)", "!target.name(Son of Flame)" } }, -- "target.deathin >= 8"
+	{ "Serpent Sting", { "!target.debuff(Serpent Sting)", "!target.state.charm", "@bbLib.notAboutToDie(target)", "!target.name(Son of Flame)" } }, -- "target.deathin >= 10",
 	{ "Multi-Shot", { "toggle.cleavemode", "player.focus > 79" } }, -- "modifier.enemies > 1"
 	{ "Arcane Shot", { "!toggle.cleavemode", "player.focus > 79" } },
 	
 	{ "Concussive Shot", { "toggle.pvpmode", "!target.debuff(Concussive Shot).any", "target.moving", "!target.immune.snare" } },
+	--{ "Concussive Shot", { "target.name(Son of Flame)", "!target.debuff(Concussive Shot).any", "target.moving", "!target.immune.snare" } },
 	{ "Widow Venom", { "toggle.pvpmode", "!target.debuff(Widow Venom).any", "target.health > 20" } },
 	
 	{ "Cobra Shot", "player.spell(Explosive Shot).cooldown > 1" },
@@ -157,16 +163,18 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 	-- Pauses
     { "pause", "modifier.lcontrol" },
 	{ "pause", "player.buff(Feign Death)" }, -- Feign Death
+	{ "pause", "player.buff(Food)" },
+	{ "pause", "player.buff(Drink)" },
 	
-	{ "Aspect of the Pack", { "toggle.aspect", "player.moving", "!player.buff(Aspect of the Cheetah)", "!player.buff(Aspect of the Pack)", "player.party" } },
-	{ "Aspect of the Cheetah", { "toggle.aspect", "player.moving", "!player.buff(Aspect of the Cheetah)", "!player.buff(Aspect of the Pack)" } },
+	{ "Aspect of the Pack", { "toggle.aspect", "player.moving", "!player.buff(Aspect of the Cheetah)", "!player.buff(Aspect of the Pack)", "!modifier.last", "player.party" } }, -- TODO: PLayer party does not work
+	{ "Aspect of the Cheetah", { "toggle.aspect", "player.moving", "!player.buff(Aspect of the Cheetah)", "!player.buff(Aspect of the Pack)", "!modifier.last" } },
 	
 	{ "Camouflage", { "toggle.camomode", "!player.buff(Camouflage)", "!player.debuff(Orb of Power)" } },
 	
 	-- Pet
 	{ "883", { "toggle.callpet", "!pet.exists" } }, -- Call Pet 1
 	{ "Revive Pet", { "pet.exists", "!pet.alive", "!player.moving" } },
-    { "Mend Pet", { "pet.health <= 90", "pet.exists", "pet.alive", "!pet.buff(Mend Pet)" } },
+    --{ "Mend Pet", { "pet.health <= 90", "pet.exists", "pet.alive", "!pet.buff(Mend Pet)", "!modifier.last(Call Pet 1)" } },
 
 	-- Traps
 	{ "Trap Launcher", { "modifier.lalt", "!player.buff(Trap Launcher)" } },

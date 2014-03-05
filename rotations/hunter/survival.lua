@@ -8,6 +8,13 @@ ProbablyEngine.rotation.register_custom(809, "bbHunterSurvival", {
 -- CONTROLS: Pause - Left Control, Explosive/Ice/Snake Traps - Left Alt, Freezing Trap - Right Alt, Scatter Shot - Right Control
 -- GUIDE: http://forum.molten-wow.com/showthread.php?t=226553
 
+-- Haste Soft Cap (T13-4P): 758 (1.66s cobra)
+-- Haste HARD Cap: 2665 (1.5s cobra)
+
+--- Proc Chronohunter with Arcane Shot when down
+--- Use Call of the Wild (Pet) because auto cast is fucking retarded.
+--- HIT CAP IS BROKEN @ 5%
+
 -- COMBAT
 	-- Rotation Utilities
 	-- TODO: Explosive Trap timer cooldown OSD
